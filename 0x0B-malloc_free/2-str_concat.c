@@ -1,90 +1,40 @@
 #include <stdlib.h>
 /**
- * wordcount - get word count from string
- *             without spaces
+ * str_concat - a function that concatenates two strings.
  *
- * @str: string to count words present
+ * @s1: input to string 1
+ * @s2: input to string 2
  *
- * Return: The number of words
+ * Return: NULL on faliure
  */
-int wordcount(char *str)
+char *str_concat(char *s1, char *s2)
 {
-int words = 0;
-while (*str != '\0')
-{
-/*skip spaces*/
-if (*str == ' ')
-str++;
-else
-{
-/*count words*/
-while (*str != ' ' && *str != '\0')
-str++;
-words++;
-}
-}
-return (words);
-}
-/**
- * free_array - free arr[i]
- *
- * @ar: array to free
- * @i: array[i]
- *
- * Return: nothing
- */
-void free_array(char **ar, int i)
-{
-if (ar != NULL && i != 0)
-{
-while (i >= 0)
-{
-free(ar[i])
-i--;
-}
-free(ar);}
-}
-/**
- * strtow - split a string to words
- *
- * @str: string to split.
- *
- * Return: NULL if it fails
- */
-char **strtow(char *str)
-{
-int i, s, j, str_l, word;
-char **string;
-if (str == NULL || *str == '\0')
+int a = 0, b = 0;
+int i, j;
+char *s;
+if (s1 == NULL)
+s1 = "";
+if (s2 == NULL)
+s2 = "";
+/*find length of str1 & str2*/
+while (s1[a] != '\0')
+a++;
+while (s2[b] != '\0')
+b++;
+/*+1 for our end of string character*/
+s = malloc((a * sizeof(char)) + ((b + 1) * sizeof(char)));
+if (s == NULL)
 return (NULL);
-str_l = wordcount(str);
-/*return null if str_l == 0 || new == NULL*/
-string = malloc((str_l + 1) * sizeof(char *));
-if (str_l == 0 || string == NULL)
-return (NULL);
-for (i = s = 0; i < str_l; i++)
+/*add the first string to array s*/
+for (i = 0; s1[i] != '\0'; i++)
+s[i] = s1[i];
+/*add the second string to array s*/
+for (j = 0; s2[j] != '\0'; j++)
 {
-for (word = s; str[word] != '\0'; word++)
-{
-if (str[word] == ' ')
-s++;
-
-	  if (str[word] != ' ' && (str[word + 1] == ' ' || str[word + 1] == '\0'))
-	    {
-	      string[i] = malloc((word - s + 2) * sizeof(char));
-	      if (string[i] == NULL)
-		{
-		  free_array(string, i);
-		  return (NULL);
-		}
-	      break;
-	    }
-	}
-
-      for (j = 0; s <= word; s++, j++)
-	string[i][j] = str[s];
-      string[i][j] = '\0';
-    }
-  string[i] = NULL;
-  return (string);
+s[i] = s2[j];
+i++;
+}
+/*null terminate our new string*/
+s[i] = '\0';
+return (s);
 }
