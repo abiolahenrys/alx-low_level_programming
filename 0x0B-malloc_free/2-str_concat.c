@@ -1,45 +1,89 @@
-#include "main.h"
-#include <stdio.h>
 #include <stdlib.h>
 /**
- * str_concat - concats strings
- * @s1: string 1
- * @s2: string 2
- * Return: returns concated string
+ * wordcount - get word count from string
+ *             without spaces
+ *
+ * @str: string to count words present
+ *
+ * Return: The number of words
  */
-char *str_concat(char *s1, char *s2)
+int wordcount(char *str)
 {
-int i, len1, len2;
-char *conc;
-i = 0;
-len1 = 0;
-len2 = 0;
-if (s1 == NULL)
-s1 = "";
-if (s2 == NULL)
-s2 = "";
-while (s1[i] != '\0')
+int words = 0;
+while (*str != '\0')
 {
-i++;
-len1++;
+/*skip spaces*/
+if (*str == ' ')
+str++;
+else
+{
+/*count words*/
+while (*str != ' ' && *str != '\0')
+str++;
+words++;
 }
-i = 0;
-while (s2[i] != '\0')
-{
-i++;
-len2++;
 }
-conc = malloc(sizeof(char) * (len1 + len2 + 1));
-if (conc == NULL)
+return (words);
+}
+/**
+* free_array - free arr[i]
+*
+* @ar: array to free
+* @i: array[i]
+*
+* Return: nothing
+*/
+void free_array(char **ar, int i)
+{
+if (ar != NULL && i != 0)
+{
+while (i >= 0)
+{
+free(ar[i]);
+i--;
+}
+free(ar);
+}
+}
+/**
+* strtow - split a string to words
+*
+* @str: string to split.
+*
+* Return: NULL if it fails
+*/
+char **strtow(char *str)
+{
+int i, s, j, str_l, word;
+char **string;
+if (str == NULL || *str == '\0')
 return (NULL);
-for (i = 0; i < len1; i++)
+str_l = wordcount(str);
+/*return null if str_l == 0 || new == NULL*/
+string = malloc((str_l + 1) * sizeof(char *));
+if (str_l == 0 || string == NULL)
+return (NULL);
+for (i = s = 0; i < str_l; i++)
 {
-conc[i] = s1[i];
-}
-for (i = 0; i < len2; i++)
+for (word = s; str[word] != '\0'; word++)
 {
-conc[i + len1] = s2[i];
+if (str[word] == ' ')
+s++;
+if (str[word] != ' ' && (str[word + 1] == ' ' || str[word + 1] == '\0'))
+{
+string[i] = malloc((word - s + 2) * sizeof(char));
+if (string[i] == NULL)
+{
+free_array(string, i);
+return (NULL);
 }
-conc[i + len1] = '\0';
-return (conc);
+break;
+}
+}
+for (j = 0; s <= word; s++, j++)
+string[i][j] = str[s];
+string[i][j] = '\0';
+}
+string[i] = NULL;
+return (string);
 }
